@@ -1,0 +1,106 @@
+[
+  {
+    "station_id": 6,
+    "station_name": "MAREGRAFO",
+    "station_depth": null,
+    "station_depth_unit": "m",
+    "station_lat": null,
+    "station_lon": null
+  },
+  {
+    "station_id": 27,
+    "station_name": "POB",
+    "station_depth": null,
+    "station_depth_unit": "m",
+    "station_lat": "-24.009433",
+    "station_lon": "-46.332399"
+  },
+  {
+    "station_id": 16,
+    "station_name": "BERÇO",
+    "station_depth": null,
+    "station_depth_unit": "m",
+    "station_lat": "-23.963112",
+    "station_lon": "-46.294508"
+  },
+  {
+    "station_id": 73,
+    "station_name": "Travessia Balsa",
+    "station_depth": null,
+    "station_depth_unit": "m",
+    "station_lat": "-23.987526",
+    "station_lon": "-46.291332"
+  },
+  {
+    "station_id": 74,
+    "station_name": "Estação de Praticagem",
+    "station_depth": null,
+    "station_depth_unit": "m",
+    "station_lat": "-23.991976",
+    "station_lon": "-46.302827"
+  },
+  {
+    "station_id": 126,
+    "station_name": "SB SABOO",
+    "station_depth": null,
+    "station_depth_unit": "m",
+    "station_lat": "-23.924955587477204",
+    "station_lon": "-46.34271383285523"
+  },
+  {
+    "station_id": 125,
+    "station_name": "PATIO",
+    "station_depth": null,
+    "station_depth_unit": "m",
+    "station_lat": "-23.960980618032377",
+    "station_lon": "-46.2919020652771"
+  },
+  {
+    "station_id": 210,
+    "station_name": "Berço TERMAG",
+    "station_depth": null,
+    "station_depth_unit": "m",
+    "station_lat": "-23.971236",
+    "station_lon": "-46.289110"
+  },
+  {
+    "station_id": 211,
+    "station_name": "Berço T-GRÃO",
+    "station_depth": null,
+    "station_depth_unit": "m",
+    "station_lat": "-23.95477",
+    "station_lon": "-46.307842"
+  },
+  {
+    "station_id": 224,
+    "station_name": "BTP",
+    "station_depth": null,
+    "station_depth_unit": "m",
+    "station_lat": "-23.919972095019304",
+    "station_lon": "-46.35155439376831"
+  },
+  {
+    "station_id": 259,
+    "station_name": "WAYPOINT ALCATRAZES DENTRO",
+    "station_depth": null,
+    "station_depth_unit": "m",
+    "station_lat": "-24",
+    "station_lon": "-45.875"
+  },
+  {
+    "station_id": 258,
+    "station_name": "WAYPOINT LAJE DENTRO",
+    "station_depth": null,
+    "station_depth_unit": "m",
+    "station_lat": "-24.3333",
+    "station_lon": "-46.4626"
+  },
+  {
+    "station_id": 257,
+    "station_name": "WAYPOINT QUEIMADA DENTRO",
+    "station_depth": null,
+    "station_depth_unit": "m",
+    "station_lat": null,
+    "station_lon": null
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm9maWxlRGF0YSI6eyJ1c2VySWQiOjQ3NCwibmFtZSI6ImRlbW8iLCJlbWFpbCI6Im1pZ25hY0BpNHNlYS5jb20iLCJjb21wYW55SWQiOjIsInBlbmRpbmdEYXRhIjp0cnVlfSwic2NvcGVzIjpbIlJFU1RSSUNURUQiXSwicm9sZXMiOltdLCJncm91cHMiOlsiL2k0Y2FzdC91c2VyIl0sImlhdCI6MTY3MzY3NjEzNSwiZXhwIjoxNjczNjc2NDM1fQ.IleSzwyYiBgFAzJMbtmPt0fMFV82ATktOAIUAUSyQSw",
+  "refresh_token": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJwcm9maWxlRGF0YSI6eyJ1c2VySWQiOjQ3NCwibmFtZSI6ImRlbW8iLCJlbWFpbCI6Im1pZ25hY0BpNHNlYS5jb20iLCJjb21wYW55SWQiOjIsInBlbmRpbmdEYXRhIjp0cnVlfSwidXNlclNlc3Npb25JZCI6IjM4N2ZkZGE2LWMzNGYtNDM3Yy1hMzdjLWFiMTI3YjQ3ZjA0NCIsImF1dGhvcml6YXRpb24iOnsic3VwZXJVc2VyIjpmYWxzZSwiYWRtaW4iOmZhbHNlLCJncm91cHMiOlsiL2k0Y2FzdC91c2VyIl0sInJvbGVzIjpbXX0sInNjb3BlcyI6WyJSRVNUUklDVEVEIl0sInJvbGVzIjpbXSwiZ3JvdXBzIjpbIi9pNGNhc3QvdXNlciJdLCJpYXQiOjE2NzM2NzYxMzUsImV4cCI6MTcwNTIxMjEzNX0.wfk6eyjxt_IPs81fAMu39lApP0Nyvo7uONbCGmqW6C9aJ73dw9ypWUX3P6GCUr2ZbzwLgLF5-4D6hw3JRNfy9g",
+  "profileData": {
+    "userId": 474,
+    "name": "demo",
+    "email": "mignac@i4sea.com",
+    "companyId": 2,
+    "pendingData": true
+  },
+  "authorization": {
+    "superUser": false,
+    "admin": false,
+    "groups": [
+      "/i4cast/user"
+    ],
+    "roles": []
+  }
+}
