@@ -1,0 +1,60 @@
+[tool.poetry]
+name = "i4cast-consumer"
+version = "1.0.0"
+description = ""
+authors = ["João Paulo Carvalho <email@jjpaulo2.dev.br>"]
+readme = "README.md"
+packages = [{include = "i4cast_consumer"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+httpx = "^0.23.3"
+redis = "^4.4.2"
+mongoengine = "^0.25.0"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.2.1"
+pytest-randomly = "^3.12.0"
+pytest-cov = "^4.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^2.15.10"
+mypy = "^0.991"
+black = "^22.12.0"
+jedi = "^0.18.2"
+bandit = "^1.7.4"
+coverage = "^7.0.5"
+
+[tool.poetry.group.production.dependencies]
+gunicorn = "^20.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+addopts = "--cov-report=xml --cov=status_receiver"
+minversion = "6.0"
+testpaths = [
+    "tests/unit"
+]
+
+[tool.coverage.run]
+omit = []
+
+[tool.coverage.paths]
+source = [
+  "i4cast_consumer"
+]
+
+[tool.pylint.main]
+extension-pkg-whitelist = [
+  "pydantic"
+]
+
+[tool.pylint.messages_control]
+max-line-length = 150
+disable = [
+  "missing-docstring",
+  "broad-except"
+]
