@@ -3,46 +3,46 @@ from httpx import AsyncClient
 from redis.asyncio import Redis
 
 from i4cast_consumer.models import EnvironmentalType
-from i4cast_consumer.settings import ApiSettings, CacheSettings
+from i4cast_consumer.settings import I4castApiSettings, RedisExtraSettings
 
 
 class I4castTalker:
 
-    def __init__(self, api_settings: ApiSettings, cache_settings: CacheSettings, redis: Redis) -> Self:
+    def __init__(self, api_settings: I4castApiSettings, redis_settings: RedisExtraSettings, redis: Redis) -> Self:
         self._api_settings = api_settings
-        self._cache_settings = cache_settings
+        self._redis_settings = redis_settings
         self._redis = redis
 
     @property
     def _auth_request_uri(self) -> str:
-        return self._api_settings.HOST + self._api_settings.AUTH_URL
+        return self._api_settings.host + self._api_settings.routes.auth
 
     @property
     def _stations_request_uri(self) -> str:
-        return self._api_settings.HOST + self._api_settings.STATIONS_URL
+        return self._api_settings.host + self._api_settings.routes.stations
 
     @property
     def _environmental_data_request_uri(self) -> str:
-        return self._api_settings.HOST + self._api_settings.ENVIRONMENTAL_DATA_URL
+        return self._api_settings.host + self._api_settings.routes.environmental_data
 
     @property
     def _auth_request_body(self) -> dict:
         return {
-            'user': self._api_settings.USERNAME,
-            'password': self._api_settings.PASSWORD,
+            'user': self._api_settings.username,
+            'password': self._api_settings.password,
             'keep_connected': True
         }
 
     @property
     def _stations_request_body(self) -> dict:
         return {
-            'region': self._api_settings.REGION
+            'region': self._api_settings.region
         }
 
     def _get_environmental_data_request_body(self, station_id: int, env_type: EnvironmentalType) -> dict:
         return {
             "station_id": station_id,
-            "region": self._api_settings.REGION,
+            "region": self._api_settings.region,
             "data_type": "forecast",
             "environmental_type": env_type.value
         }
@@ -63,14 +63,14 @@ class I4castTalker:
 
     async def _get_auth_token_from__redis(self) -> Optional[bytes]:
         return await self._redis.get(
-            name=self._cache_settings.AUTH_TOKEN_KEY
+            name=self._redis_settings.auth_token_key
         )
 
     async def _set_auth_token_to__redis(self, value: str) -> None:
         await self._redis.set(
-            name=self._cache_settings.AUTH_TOKEN_KEY,
+            name=self._redis_settings.auth_token_key,
             value=value,
-            ex=self._api_settings.AUTH_EXPIRATION
+            ex=self._api_settings.auth_expiration
         )
 
     async def get_auth_token(self) -> str:
@@ -78,7 +78,7 @@ class I4castTalker:
 
         if cached_token:
             return cached_token.decode(
-                encoding=self._cache_settings.ENCODING
+                encoding=self._redis_settings.encoding
             )
 
         token_from_api = await self._get_auth_token_from_api()
