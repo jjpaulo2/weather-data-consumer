@@ -1,3 +1,5 @@
+from enum import Enum
+
 from mongoengine.document import (
     Document,
     EmbeddedDocument
@@ -10,6 +12,16 @@ from mongoengine.fields import (
     ReferenceField,
     EmbeddedDocumentListField
 )
+
+
+class EnvironmentalType(Enum):
+    WEATHER = 'weather'
+    WATER_FLOW = 'water_flow'
+    WAVE = 'wave'
+
+    @classmethod
+    def list(cls) -> list[str]:
+        return [item.value for item in cls]
 
 
 class Station(Document):
@@ -34,7 +46,9 @@ class EnvironmentalDataList(Document):
     region = StringField()
     region_timezone = StringField()
     data_type = StringField()
-    environmental_type = StringField()
+    environmental_type = StringField(
+        choices=EnvironmentalType.list()
+    )
     environmental_data = EmbeddedDocumentListField(
         EnvironmentalData
     )
