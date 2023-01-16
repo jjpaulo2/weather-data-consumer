@@ -3,13 +3,20 @@ from datetime import datetime
 from os import makedirs
 from contextlib import suppress
 
+from pymongo.errors import PyMongoError
+
 from i4cast_consumer.settings import JsonExportingSettings
 from i4cast_consumer.models import EnvironmentalDataList
 
 
 async def export_to_mongodb(environmental_data: dict) -> None:
-    env_data_obj = EnvironmentalDataList(**environmental_data)
-    env_data_obj.save()
+    try:
+        env_data_obj = EnvironmentalDataList(**environmental_data)
+        env_data_obj.save()
+        print('Informações salvas corretamente no banco de dados.')
+
+    except PyMongoError:
+        print('Não foi possivel salvar as informações no banco de dados.')
 
 
 async def export_to_json(environmental_data: dict, json_settings: JsonExportingSettings) -> None:

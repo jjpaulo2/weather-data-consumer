@@ -1,6 +1,10 @@
 from typing import Optional, Self
+from sys import exit
 
-from i4cast_consumer.exceptions import NotFoundEnvironmentalDataException
+from i4cast_consumer.exceptions import (
+    NotFoundEnvironmentalDataException,
+    UnauthorizedException
+)
 from i4cast_consumer.settings import JsonExportingSettings
 from i4cast_consumer.models import EnvironmentalType
 from i4cast_consumer.talkers import I4castTalker
@@ -25,40 +29,36 @@ class GetAndSaveEnvironmentalData:
             station_id=station_id,
             environmental_type=env_type
         )
-        
-        if env_data.get('status') != 404:
-            print(
-                'Dados encontrados os parâmetros fornecidos.',
-                f'station_id: \'{station_id}\'.',
-                f'env_type: \'{env_type.value}\'.'
-            )
-            await self._export_data(env_data)
-        
-        else:
-            raise NotFoundEnvironmentalDataException(
-                station_id=station_id,
-                env_type=env_type.value
-            )
+        print(
+            'Dados encontrados para os parâmetros fornecidos.',
+            f'station_id: \'{station_id}\'.',
+            f'env_type: \'{env_type.value}\'.'
+        )
+        await self._export_data(env_data)
 
     async def _consume_complete_data(self) -> None:
         for station in await self._api_talker.get_stations():
             for env_type in EnvironmentalType:
-
-                try:
-                    await self._consume_data(
-                        station_id=station.get('station_id', 0),
-                        env_type=env_type
-                    )
-
-                except NotFoundEnvironmentalDataException as exc:
-                    print(
-                        exc.message,
-                        f'station_id: \'{exc.station_id}\'.',
-                        f'env_type: \'{exc.env_type}\'.'
-                    )
+                await self._consume_data(
+                    station_id=station.get('station_id', 0),
+                    env_type=env_type
+                )
 
     async def run(self, station_id: Optional[int] = None, env_type: Optional[EnvironmentalType] = None) -> None:
-        if station_id and env_type:
-            await self._consume_data(station_id, env_type)
-        else:
-            await self._consume_complete_data()
+        try:
+            if station_id and env_type:
+                await self._consume_data(station_id, env_type)
+            else:
+                await self._consume_complete_data()
+
+        except NotFoundEnvironmentalDataException as exc:
+            print(
+                exc.message,
+                f'station_id: \'{exc.station_id}\'.',
+                f'env_type: \'{exc.env_type}\'.'
+            )
+            exit(-1)
+
+        except UnauthorizedException as exc:
+            print(exc.message)
+            exit(-1)

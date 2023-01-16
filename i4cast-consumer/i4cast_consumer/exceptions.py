@@ -8,3 +8,8 @@ class NotFoundEnvironmentalDataException(Exception):
         self.station_id = station_id
         self.env_type = env_type
 
+
+class UnauthorizedException(Exception):
+
+    def __init__(self) -> Self:
+        self.message = 'Não foi possivel consumir a API com as credenciais fornecidas.'

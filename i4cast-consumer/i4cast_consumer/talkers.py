@@ -1,7 +1,11 @@
 from typing import Self, Optional
-from httpx import AsyncClient
+from httpx import AsyncClient, codes
 from redis.asyncio import Redis
 
+from i4cast_consumer.exceptions import (
+    UnauthorizedException,
+    NotFoundEnvironmentalDataException
+)
 from i4cast_consumer.models import EnvironmentalType
 from i4cast_consumer.settings import (
     I4castApiSettings,
@@ -62,6 +66,10 @@ class I4castTalker:
                 self._auth_request_uri,
                 json=self._auth_request_body
             )
+
+        if response.status_code == codes.UNAUTHORIZED:
+            raise UnauthorizedException()
+
         return response.json().get('access_token')
 
     async def _get_auth_token_from__redis(self) -> Optional[bytes]:
@@ -110,4 +118,11 @@ class I4castTalker:
                 ),
                 headers=await self._get_auth_headers()
             )
+        
+        if response.status_code == codes.NOT_FOUND:
+            raise NotFoundEnvironmentalDataException(
+                station_id=station_id,
+                env_type=environmental_type.value
+            )
+
         return response.json()

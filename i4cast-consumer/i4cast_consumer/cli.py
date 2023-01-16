@@ -2,7 +2,6 @@ from asyncio.exceptions import CancelledError
 from argparse import ArgumentParser
 from sys import exit
 
-from i4cast_consumer.exceptions import NotFoundEnvironmentalDataException
 from i4cast_consumer.app import run_main
 from i4cast_consumer.models import EnvironmentalType
 from i4cast_consumer import (
@@ -36,14 +35,6 @@ def cli() -> None:
 
     try:
         run_main(**module_args)
-
-    except NotFoundEnvironmentalDataException as exc:
-        print(
-            exc.message,
-            f'station_id: \'{exc.station_id}\'.',
-            f'env_type: \'{exc.env_type}\'.'
-        )
-        exit(-1)
 
     except CancelledError:
         print('\nEncerrando o programa...')
