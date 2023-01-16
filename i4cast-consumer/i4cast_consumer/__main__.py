@@ -1,5 +1,5 @@
-from i4cast_consumer.app import run_main
+from i4cast_consumer.cli import cli
 
 
 if __name__ == '__main__':
-    run_main()
+    cli()

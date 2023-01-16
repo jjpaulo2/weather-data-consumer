@@ -59,5 +59,6 @@ max-line-length = 150
 disable = [
   "missing-docstring",
   "broad-except",
-  "consider-using-f-string"
+  "consider-using-f-string",
+  "redefined-builtin"
 ]
