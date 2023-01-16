@@ -1,6 +1,8 @@
+from contextlib import suppress
 from typing import Self, Optional
 from httpx import AsyncClient, codes
 from redis.asyncio import Redis
+from redis.exceptions import ConnectionError
 
 from i4cast_consumer.exceptions import (
     UnauthorizedException,
@@ -73,16 +75,22 @@ class I4castTalker:
         return response.json().get('access_token')
 
     async def _get_auth_token_from__redis(self) -> Optional[bytes]:
-        return await self._redis.get(
-            name=self._redis_settings.auth_token_key
-        )
+        try:
+            return await self._redis.get(
+                name=self._redis_settings.auth_token_key
+            )
+        
+        except ConnectionError:
+            print('Não foi possível estabelecer uma conexão com o Redis.')
+            return None
 
     async def _set_auth_token_to_redis(self, value: str) -> None:
-        await self._redis.set(
-            name=self._redis_settings.auth_token_key,
-            value=value,
-            ex=self._api_settings.auth_expiration
-        )
+        with suppress(ConnectionError):
+            await self._redis.set(
+                name=self._redis_settings.auth_token_key,
+                value=value,
+                ex=self._api_settings.auth_expiration
+            )
 
     async def get_auth_token(self) -> str:
         cached_token = await self._get_auth_token_from__redis()
