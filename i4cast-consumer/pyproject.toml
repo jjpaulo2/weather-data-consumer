@@ -11,6 +11,7 @@ python = "^3.11"
 httpx = "^0.23.3"
 redis = "^4.4.2"
 mongoengine = "^0.25.0"
+uvloop = "^0.17.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.2.1"

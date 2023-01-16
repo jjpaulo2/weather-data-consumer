@@ -1,4 +1,5 @@
-import asyncio
+from asyncio import Runner
+from uvloop import new_event_loop
 
 from redis.asyncio import Redis
 from mongoengine.connection import (
@@ -32,8 +33,8 @@ async def main() -> None:
 
 
 def run_main() -> None:
-    loop = asyncio.new_event_loop()
-    loop.run_until_complete(main())
+    with Runner(loop_factory=new_event_loop) as uv_runner:
+        uv_runner.run(main())
 
 
 if __name__ == '__main__':

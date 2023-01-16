@@ -27,4 +27,5 @@ class GetAndSaveEnvironmentalData:
                     environmental_type=env_type
                 )
                 if env_data.get('status') != 404:
+                    print(f'Found content for {station.get("station_id")} and {env_type.value}')
                     await self._export_data(env_data)
