@@ -34,3 +34,7 @@ class MongoDbSettings(BaseSettings):
     port: int = Field(env='MONGODB_PORT', default=27017)
     username: str = Field(env='MONGODB_USERNAME', default='admin')
     password: str = Field(env='MONGODB_PASSWORD', default='admin')
+
+
+class JsonExportingSettings(BaseSettings):
+    directory: str = Field(env='JSON_EXPORTING_DIRECTORY', default='dist')

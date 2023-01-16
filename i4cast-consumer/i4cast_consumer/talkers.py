@@ -3,7 +3,10 @@ from httpx import AsyncClient
 from redis.asyncio import Redis
 
 from i4cast_consumer.models import EnvironmentalType
-from i4cast_consumer.settings import I4castApiSettings, RedisExtraSettings
+from i4cast_consumer.settings import (
+    I4castApiSettings,
+    RedisExtraSettings
+)
 
 
 class I4castTalker:
@@ -49,7 +52,7 @@ class I4castTalker:
 
     async def _get_auth_headers(self) -> dict[str, str]:
         return {
-            'Authentication': f'Bearer {await self.get_auth_token()}'
+            'Authorization': f'Bearer {await self.get_auth_token()}'
         }
 
     async def _get_auth_token_from_api(self) -> str:
@@ -66,7 +69,7 @@ class I4castTalker:
             name=self._redis_settings.auth_token_key
         )
 
-    async def _set_auth_token_to__redis(self, value: str) -> None:
+    async def _set_auth_token_to_redis(self, value: str) -> None:
         await self._redis.set(
             name=self._redis_settings.auth_token_key,
             value=value,
@@ -82,7 +85,7 @@ class I4castTalker:
             )
 
         token_from_api = await self._get_auth_token_from_api()
-        await self._set_auth_token_to__redis(token_from_api)
+        await self._set_auth_token_to_redis(token_from_api)
 
         return token_from_api
 

@@ -57,5 +57,6 @@ extension-pkg-whitelist = [
 max-line-length = 150
 disable = [
   "missing-docstring",
-  "broad-except"
+  "broad-except",
+  "consider-using-f-string"
 ]
