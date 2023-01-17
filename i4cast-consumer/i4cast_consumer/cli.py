@@ -18,7 +18,7 @@ def get_args_parser() -> ArgumentParser:
     )
 
     parser.add_argument('-s', '--station', default=None, required=False, type=int)
-    parser.add_argument('-e', '--environment_type', default=None, required=False, type=EnvironmentalType)
+    parser.add_argument('-e', '--environmental_type', default=None, required=False, type=EnvironmentalType)
 
     return parser
 
@@ -27,10 +27,10 @@ def cli() -> None:
     cli_args = get_args_parser().parse_args()
     module_args = {}
 
-    if cli_args.station and cli_args.environment_type:
+    if cli_args.station and cli_args.environmental_type:
         module_args = {
             'station_id': cli_args.station,
-            'env_type': cli_args.environment_type
+            'env_type': cli_args.environmental_type
         }
 
     try:
