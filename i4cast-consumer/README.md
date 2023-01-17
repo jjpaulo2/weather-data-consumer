@@ -37,7 +37,6 @@ Abaixo há instruções de como instalar [com docker](#executando-com-docker), o
 
 #### Stack
 
-- Python 3.11
 - Pydantic
 - HTTPX
 - MongoEngine
