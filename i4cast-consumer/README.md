@@ -25,6 +25,14 @@ $ python -m i4cast_consumer -s 27 -e weather
 $ python -m i4cast_consumer --station 27 --environment_type weather
 ```
 
+O módulo executará alguns passos:
+
+- Tentará autenticar na API
+- Caso o Redis esteja devidamente configurado, ele salvará o token obtido
+- Buscará as devidas informações na API
+- Escreverá as saídas em arquivos json na pasta `dist` (configurada via variável `JSON_EXPORTING_DIRECTORY`)
+- Caso o MongoDB esteja devidamente configurado, as saídas também serão salvas nele
+
 Abaixo há instruções de como instalar [com docker](#executando-com-docker), ou [sem docker](#executando-sem-docker).
 
 #### Stack
