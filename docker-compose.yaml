@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+
+  i4cast-consumer-job:
+    build: 
+      context: ./i4cast-consumer
+      dockerfile: job.dockerfile
+    depends_on:
+      - mongodb
+      - redis
+      - i4cast-mock-api
+    volumes:
+      - $PWD/dist:/srv/dist
+    environment:
+      - MONGODB_HOST=mongodb
+      - REDIS_HOST=redis
+      - I4CAST_HOST=http://i4cast-mock-api:8880
+      - I4CAST_USERNAME=admin
+      - I4CAST_PASSWORD=admin
+
+  i4cast-mock-api:
+    build: ./i4cast-mock-api
+    ports:
+      - 8880:8880
+
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
