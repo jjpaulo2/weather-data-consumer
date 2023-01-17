@@ -1,7 +1,7 @@
-FROM alpine:edge
+FROM python:3.11-alpine
 
 RUN apk update
-RUN apk add build-base make python3 py3-pip
+RUN apk add build-base make
 
 COPY ./i4cast_mock_api /srv/i4cast_mock_api
 COPY ./requirements.txt /srv/requirements.txt
