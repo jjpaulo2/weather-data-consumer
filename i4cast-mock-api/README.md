@@ -20,7 +20,7 @@ Execute o módulo dentro do container.
 ```shell
 docker run \
     -dp 8880:8880 \
-    i4cast-consumer
+    i4cast-mock-api
 ```
 
 Navegue para [http://0.0.0.0:8880/v1/i4cast-api](http://0.0.0.0:8880/v1/i4cast-api).
