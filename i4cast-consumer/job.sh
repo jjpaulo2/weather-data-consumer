@@ -32,7 +32,8 @@ compress_output_files() {
     echo 'Compactando arquivos gerados...'
 
     NOW=$(date +'%s');
-    tar -czvf output-${NOW}.tar.gz ./dist/*;
+    rm ${JSON_EXPORTING_DIRECTORY}/*.tar.gz > /dev/null;
+    tar -czvf ${JSON_EXPORTING_DIRECTORY}/output-${NOW}.tar.gz ${JSON_EXPORTING_DIRECTORY}/*.json;
 }
 
 main() {

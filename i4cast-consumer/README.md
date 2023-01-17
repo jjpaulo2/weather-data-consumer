@@ -1,10 +1,12 @@
 # I4cast Consumer
 
-Módulo Python que consome a API i4cast e salva as informações.
+Módulo Python que consome a API i4cast e salva as informações. 
+
+Há também uma cronjob executável via docker que faz a consulta em intervalos configuráveis.
 
 ### Como usar
 
-Defina as variáveis `I4CAST_HOST`, `I4CAST_USERNAME` e `I4CAST_PASSWORD`.
+Antes de qualquer coisa, defina as variáveis `I4CAST_HOST`, `I4CAST_USERNAME` e `I4CAST_PASSWORD`.
 
 ```shell
 $ export I4CAST_HOST=...
@@ -12,30 +14,52 @@ $ export I4CAST_USERNAME=...
 $ export I4CAST_PASSWORD=...
 ```
 
-Para consumir todos os dados para uma região (configurada via variável `I4CAST_REGION`), utilize o comando abaixo.
+#### Apenas o módulo
+
+Faça o build da imagem.
 
 ```shell
-$ python -m i4cast_consumer
+$ docker build --no-cache -t i4cast-consumer -f module.dockerfile .
 ```
 
-Para aplicar filtros por `station` e `environmental_type`, utilize os parâmetros, como abaixo.
+Execute o módulo dentro do container.
 
 ```shell
-$ python -m i4cast_consumer -s 27 -e weather
-$ python -m i4cast_consumer --station 27 --environment_type weather
+docker run \
+    -v $PWD/dist:/srv/dist \
+    -e I4CAST_HOST=${I4CAST_HOST} \
+    -e I4CAST_USERNAME=${I4CAST_USERNAME} \
+    -e I4CAST_PASSWORD=${I4CAST_PASSWORD} \
+    i4cast-consumer \
+    python -m i4cast_consumer -s 27 -e weather
 ```
 
-O módulo executará alguns passos:
+Veja as [variáveis de ambiente](#variáveis-de-ambiente).
 
-- Tentará autenticar na API
-- Caso o Redis esteja devidamente configurado, ele salvará o token obtido
-- Buscará as devidas informações na API
-- Escreverá as saídas em arquivos json na pasta `dist` (configurada via variável `JSON_EXPORTING_DIRECTORY`)
-- Caso o MongoDB esteja devidamente configurado, as saídas também serão salvas nele
+#### Cronjob
 
-Abaixo há instruções de como instalar [com docker](#executando-com-docker), ou [sem docker](#executando-sem-docker).
+Faça o build da imagem.
 
-#### Stack
+```shell
+$ docker build --no-cache -t i4cast-job -f job.dockerfile .
+```
+
+Execute o job através do container.
+
+```shell
+docker run \
+    -v $PWD/dist:/srv/dist \
+    -e I4CAST_HOST=${I4CAST_HOST} \
+    -e I4CAST_USERNAME=${I4CAST_USERNAME} \
+    -e I4CAST_PASSWORD=${I4CAST_PASSWORD} \
+    -e I4CAST_JOB_STATION=27 \
+    -e I4CAST_JOB_ENVIRONMENTAL_TYPE=weather \
+    i4cast-job
+```
+
+Por padrão, o job será executado a cada minuto. Caso queira mudar esse intervalo, basta sobrescrever a variável `CRON_EXPRESSION`. Veja as [variáveis de ambiente](#variáveis-de-ambiente).
+
+### Stack
 
 - Pydantic
 - HTTPX
@@ -43,9 +67,12 @@ Abaixo há instruções de como instalar [com docker](#executando-com-docker), o
 - Redis.py
 - UVLoop
 
-## Detalhes da preparação para executar
 
-### Variáveis de ambiente
+## Variáveis de ambiente
+
+As variáveis que configuram conexão com MongoDB e Redis são opcionais, já as que configuram o consumo da API da i4cast, em especial `I4CAST_HOST`, `I4CAST_USERNAME` e `I4CAST_PASSWORD` devem ser definidas antes da execução do módulo.
+
+### Variáveis gerais
 
 | Variável | Padrão |
 |-|-|
@@ -65,29 +92,17 @@ Abaixo há instruções de como instalar [com docker](#executando-com-docker), o
 | MONGODB_USERNAME | admin |
 | MONGODB_PASSWORD | admin |
 
-As variáveis que configuram conexão com MongoDB e Redis são opcionais, já as que configuram o consumo da API da i4cast, em especial `I4CAST_HOST`, `I4CAST_USERNAME` e `I4CAST_PASSWORD` devem ser definidas antes da execução do módulo.
+### Variáveis apenas do cronjob
 
-### Executando com docker
+| Variável | Padrão |
+|-|-|
+| I4CAST_JOB_STATION | 27 |
+| I4CAST_JOB_ENVIRONMENTAL_TYPE | weather |
+| CRON_EXPRESSION | * * * * * |
+| CRON_COMMAND | sh /srv/job.sh $I4CAST_JOB_STATION $I4CAST_JOB_ENVIRONMENTAL_TYPE |
 
-Faça o build da imagem.
 
-```shell
-$ docker build --no-cache -t i4cast-consumer .
-```
-
-Execute o módulo dentro do container.
-
-```shell
-docker run \
-    -v $PWD/dist:/srv/dist
-    -e I4CAST_HOST=${I4CAST_HOST}
-    -e I4CAST_USERNAME=${I4CAST_USERNAME}
-    -e I4CAST_PASSWORD=${I4CAST_PASSWORD}
-    i4cast-consumer \
-    python -m i4cast_consumer -s 27 -e weather
-```
-
-### Executando sem docker
+## Executando o módulo sem docker
 
 Garanta que você tem a versão 3.11 do python instalada.
 
@@ -128,3 +143,13 @@ Caso deseje filtrar por `station` e `environment_type`, basta usar um dos comand
 $ python -m i4cast_consumer -s 27 -e weather
 $ python -m i4cast_consumer --station 27 --environment_type weather
 ```
+
+#### Detalhes da implementação
+
+O módulo executará alguns passos:
+
+- Tentará autenticar na API
+- Caso o Redis esteja devidamente configurado, ele salvará o token obtido
+- Buscará as devidas informações na API
+- Escreverá as saídas em arquivos json na pasta `dist` (configurada via variável `JSON_EXPORTING_DIRECTORY`)
+- Caso o MongoDB esteja devidamente configurado, as saídas também serão salvas nele
